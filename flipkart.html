@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple E-Commerce Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            background-color: #343a40;
+            color: white;
+            padding: 0.5rem;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        nav a:hover {
+            background-color: #495057;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .hero {
+            background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .hero h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+        .search-bar {
+            margin: 2rem auto;
+            max-width: 600px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+        .search-bar button {
+            padding: 0.5rem 1rem;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+        }
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .product-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex: 1 1 calc(25% - 1rem);
+            box-sizing: border-box;
+        }
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .product-card h2 {
+            font-size: 1.25rem;
+            margin: 0.5rem 0;
+        }
+        .product-card p {
+            margin: 0.5rem 0;
+        }
+        .product-card button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .product-card button:hover {
+            background-color: #218838;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        #cart {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Simple E-Commerce Site</h1>
+    </header>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#cart">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+    <div class="hero" aria-labelledby="hero-heading">
+        <h1 id="hero-heading">Welcome to Our Store!</h1>
+    </div>
+    <div class="search-bar">
+        <input type="text" placeholder="Search for products..." aria-label="Search for products" id="search-input">
+        <button aria-label="Search" onclick="searchProducts()">Search</button>
+    </div>
+    <div class="container">
+        <section id="products" aria-labelledby="products-heading">
+            <h2 id="products-heading">Featured Products</h2>
+            <div class="product-list" id="product-list">
+                <!-- Product cards will be dynamically inserted here -->
+            </div>
+        </section>
+        <div id="cart">
+            <h2>Your Cart</h2>
+            <ul id="cart-items">
+                <!-- Cart items will be dynamically inserted here -->
+            </ul>
+            <p>Total: $<span id="cart-total">0.00</span></p>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Simple E-Commerce Site. All rights reserved.</p>
+    </footer>
+    <script>
+        const products = [
+            { id: 1, name: 'Product 1', price: 10.00, image: 'https://via.placeholder.com/200x200' },
+            { id: 2, name: 'Product 2', price: 20.00, image: 'https://via.placeholder.com/200x200' },
+            { id: 3, name: 'Product 3', price: 30.00, image: 'https://via.placeholder.com/200x200' },
+            { id: 4, name: 'Product 4', price: 40.00, image: 'https://via.placeholder.com/200x200' },
+        ];
+        const cart = [];
+
+        function renderProducts() {
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h2>${product.name}</h2>
+                    <p>$${product.price.toFixed(2)}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productList.appendChild(productCard);
+            });
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const cartItem = cart.find(item => item.product.id === productId);
+            if (cartItem) {
+                cartItem.quantity++;
+            } else {
+                cart.push({ product, quantity: 1 });
+            }
+            updateCart();
+        }
+
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotal = document.getElementById('cart-total');
+            cartItems.innerHTML = '';
+            let total = 0;
+            cart.forEach(item => {
+                const cartItem = document.createElement('li');
+                cartItem.textContent = `${item.product.name} x ${item.quantity} - $${(item.product.price * item.quantity).toFixed(2)}`;
+                cartItems.appendChild(cartItem);
+                total += item.product.price * item.quantity;
+            });
+            cartCount.textContent = cart.length;
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        function searchProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filteredProducts = products.filter(p => p.name.toLowerCase().includes(query));
+            const productList = document.getElementById('product-list');
+            productList.innerHTML = '';
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h2>${product.name}</h2>
+                    <p>$${product.price.toFixed(2)}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productList.appendChild(productCard);
+            });
+        }
+
+        // Initial rendering of products
+        renderProducts();
+    </script>
+</body>
+</html>

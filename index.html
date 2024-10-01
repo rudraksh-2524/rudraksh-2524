@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Of AI</title> 
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  </head>
+  <body>
+    <div class="container">
+      <h1> Welcome , I am Your AI </h1>
+
+      <!-- Chat Display Area -->
+      <div class="chat-container" id="chat-container">
+        <!-- Example message from AI -->
+        <div class="chat-message ai">
+          <div class="message">कृपया मुझे माफ़ करे मै आपके लिए नहीं बना हु !! </div>
+        </div>
+      </div>
+
+      <!-- User Input Section -->
+      <div class="prompt-area">
+        <input
+          type="text"
+          class="prompt"
+          id="prompt"
+          placeholder="Type your message here..."
+        />
+        <button class="btn" id="send-btn">Send</button>
+      </div>
+    </div>
+
+    <!-- Optional Loading Animation -->
+    <div class="loading" style="display: none;">
+     
+    </div>
+
+    <!-- Include the JavaScript file to add interactivity -->
+    <script src="app.js"></script>
+    
+  </body>
+</html>
